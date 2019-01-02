@@ -1,0 +1,14 @@
+name: sketch
+channels:
+- anaconda
+- pytorch
+dependencies:
+- python=3.6
+- pytorch=0.3
+- numpy
+- scipy
+- pip:
+  - torchvision
+  - dominate
+  - visdom
+  - Pillow==5.0.0
