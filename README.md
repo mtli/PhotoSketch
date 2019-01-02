@@ -1,10 +1,10 @@
 # Photo-Sketching: Inferring Contour Drawings from Images
 
-<p align="center"><img alt="Teaser" src="doc/teaser.jpg" height="200px"></p>
+<p align="center"><img alt="Teaser" src="doc/teaser.jpg"></p>
 
-This repo contains the training & testing code for our sketch generator. We also provide a [pre-trained model](https://drive.google.com/file/d/1TQf-LyS8rRDDapdcTnEgWzYJllPgiXdj/view?usp=sharing).
+This repo contains the training & testing code for our sketch generator. We also provide a [[pre-trained model]](https://drive.google.com/file/d/1TQf-LyS8rRDDapdcTnEgWzYJllPgiXdj/view?usp=sharing).
 
-For technical details and the dataset, please refer to the the [paper]() and the [project page](http://www.cs.cmu.edu/~mengtial/proj/sketch).
+For technical details and the dataset, please refer to the the [[paper]]() and the [[project page]](http://www.cs.cmu.edu/~mengtial/proj/sketch).
 
 # Setting up
 
@@ -13,7 +13,7 @@ Currently it only supports PyTorch 0.3. Support for 0.4 is coming soon!
 ## One-line installation (with Conda environments)
 `conda env create -f environment.yml`
 
-Then activate the environment (mtpt) and you are ready to go!
+Then activate the environment (sketch) and you are ready to go!
 
 See [here](https://conda.io/docs/user-guide/tasks/manage-environments.html) for more information about conda environments.
 
