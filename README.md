@@ -4,7 +4,7 @@
 
 This repo contains the training & testing code for our sketch generator. We also provide a [[pre-trained model]](https://drive.google.com/file/d/1TQf-LyS8rRDDapdcTnEgWzYJllPgiXdj/view).
 
-For technical details and the dataset, please refer to the [**[paper]**]() and the [**[project page]**](http://www.cs.cmu.edu/~mengtial/proj/sketch).
+For technical details and the dataset, please refer to the [**[paper]**](https://arxiv.org/abs/1901.00542) and the [**[project page]**](http://www.cs.cmu.edu/~mengtial/proj/sketch/).
 
 # Setting up
 
@@ -30,7 +30,7 @@ It supports a folder of images as input.
 
 # Train & test on our contour drawing dataset
 
-- Download the images and the rendered sketch from the [project page](http://www.cs.cmu.edu/~mengtial/proj/sketch)
+- Download the images and the rendered sketch from the [project page](http://www.cs.cmu.edu/~mengtial/proj/sketch/)
 - Unzip and organize them into the following structure:
 <p align="center"><img alt="File structure" src="doc/file_structure.png"></p>
 
