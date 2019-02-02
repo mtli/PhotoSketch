@@ -8,7 +8,9 @@ For technical details and the dataset, please refer to the [**[paper]**](https:/
 
 # Setting up
 
-Currently it only supports PyTorch 0.3. Support for 0.4 is coming soon!
+The code is now updated to use PyTorch 0.4 and runs on Windows, Mac and Linux. For the obsolete version with PyTorch 0.3 (Linux only), please check out the branch [pytorch-0.3-obsolete](tree/master/pytorch-0.3-obsolete).
+
+Windows users should find the corresponding `.cmd` files instead of `.sh` files mentioned below.
 
 ## One-line installation (with Conda environments)
 `conda env create -f environment.yml`

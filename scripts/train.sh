@@ -18,6 +18,5 @@ python train.py \
     --lr 0.0002 \
     --aug_folder width-5 \
     --crop --rotate --color_jitter \
-    --niter 200 \
-    --niter_decay 200 \
-    --lr_decay_iters 100 \
+    --niter 400 \
+    --niter_decay 400 \

@@ -11,10 +11,17 @@ from PIL import Image
 import os
 import os.path
 
-IMG_EXTENSIONS = [
-    '.jpg', '.JPG', '.jpeg', '.JPEG',
-    '.png', '.PNG', '.ppm', '.PPM', '.bmp', '.BMP',
-]
+import platform
+
+if platform.system() == 'Windows':
+    IMG_EXTENSIONS = [
+        '.jpg', '.jpeg', '.png', '.ppm', '.bmp',
+    ]
+else:
+    IMG_EXTENSIONS = [
+        '.jpg', '.JPG', '.jpeg', '.JPEG',
+        '.png', '.PNG', '.ppm', '.PPM', '.bmp', '.BMP',
+    ]
 
 
 def is_image_file(filename):

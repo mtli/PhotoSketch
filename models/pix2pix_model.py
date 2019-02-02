@@ -20,23 +20,29 @@ class Pix2PixModel(BaseModel):
 
         # load/define networks
         self.netG = networks.define_G(opt.input_nc, opt.output_nc, opt.ngf,
-                                      opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids)
+                                      opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type)
+
         if self.isTrain:
             use_sigmoid = opt.no_lsgan
             self.netD = networks.define_D(opt.input_nc + opt.output_nc, opt.ndf,
                                           opt.which_model_netD,
-                                          opt.n_layers_D, opt.norm, use_sigmoid, opt.init_type, self.gpu_ids)
+                                          opt.n_layers_D, opt.norm, use_sigmoid, opt.init_type)
+
         if not self.isTrain or opt.continue_train:
             self.load_network(self.netG, 'G', opt.which_epoch)
             if self.isTrain:
                 self.load_network(self.netD, 'D', opt.which_epoch)
 
+        self.netG = self.netG.to(self.device)
+        if self.isTrain:
+            self.netD = self.netD.to(self.device)
+
         if self.isTrain:
             self.fake_AB_pool = ImagePool(opt.pool_size)
             self.old_lr = opt.lr
             # define loss functions
-            self.criterionGAN = networks.GANLoss(use_lsgan=not opt.no_lsgan, tensor=self.Tensor)
-            self.criterionL1 = torch.nn.L1Loss()
+            self.criterionGAN = networks.GANLoss(use_lsgan=not opt.no_lsgan, device=self.device)
+            self.criterionL1 = torch.nn.L1Loss().to(self.device)
 
             # initialize optimizers
             self.schedulers = []
@@ -58,13 +64,8 @@ class Pix2PixModel(BaseModel):
 
     def set_input(self, input):
         AtoB = self.opt.which_direction == 'AtoB'
-        input_A = input['A' if AtoB else 'B']
-        input_B = input['B' if AtoB else 'A']
-        if len(self.gpu_ids) > 0:
-            input_A = input_A.cuda(self.gpu_ids[0], async=True)
-            input_B = input_B.cuda(self.gpu_ids[0], async=True)
-        self.input_A = input_A
-        self.input_B = input_B
+        self.input_A = input['A' if AtoB else 'B'].to(self.device)
+        self.input_B = input['B' if AtoB else 'A'].to(self.device)
         self.image_paths = input['A_paths' if AtoB else 'B_paths']
         if 'w' in input:
             self.input_w = input['w']
@@ -72,15 +73,14 @@ class Pix2PixModel(BaseModel):
             self.input_h = input['h']
 
     def forward(self):
-        self.real_A = Variable(self.input_A)
+        self.real_A = self.input_A
         self.fake_B = self.netG(self.real_A)
-        self.real_B = Variable(self.input_B)
+        self.real_B = self.input_B
 
     # no backprop gradients
     def test(self):
-        self.real_A = Variable(self.input_A, volatile=True)
-        self.fake_B = self.netG(self.real_A)
-        self.real_B = Variable(self.input_B, volatile=True)
+        with torch.no_grad():
+            self.forward()
 
     # get image paths
     def get_image_paths(self):
@@ -89,19 +89,19 @@ class Pix2PixModel(BaseModel):
     def backward_D(self):
         # Fake
         # stop backprop to the generator by detaching fake_B
-        fake_AB = self.fake_AB_pool.query(torch.cat((self.real_A, self.fake_B), 1).data)
+        fake_AB = self.fake_AB_pool.query(torch.cat((self.real_A, self.fake_B), 1).detach())
         pred_fake = self.netD(fake_AB.detach())
         self.loss_D_fake = self.criterionGAN(pred_fake, False)
 
         # Real
         n = self.real_B.shape[1]
-        loss_D_real_set = n*[None]
+        loss_D_real_set = torch.empty(n, device=self.device)
         for i in range(n):
             sel_B = self.real_B[:, i, :, :].unsqueeze(1)
             real_AB = torch.cat((self.real_A, sel_B), 1)
             pred_real = self.netD(real_AB)
             loss_D_real_set[i] = self.criterionGAN(pred_real, True)
-        self.loss_D_real = torch.mean(torch.cat(loss_D_real_set, 0))
+        self.loss_D_real = torch.mean(loss_D_real_set)
 
         # Combined loss
         self.loss_D = (self.loss_D_fake + self.loss_D_real) * 0.5 * self.opt.lambda_G
@@ -140,28 +140,28 @@ class Pix2PixModel(BaseModel):
         self.optimizer_G.step()
 
     def get_current_errors(self):
-        return OrderedDict([('G_GAN', self.loss_G_GAN.data[0]),
-                            ('G_L1', self.loss_G_L1.data[0]),
-                            ('D_real', self.loss_D_real.data[0]),
-                            ('D_fake', self.loss_D_fake.data[0])
+        return OrderedDict([('G_GAN', self.loss_G_GAN.item()),
+                            ('G_L1', self.loss_G_L1.item()),
+                            ('D_real', self.loss_D_real.item()),
+                            ('D_fake', self.loss_D_fake.item())
                             ])
 
     def get_current_visuals(self):
-        real_A = util.tensor2im(self.real_A.data)
-        fake_B = util.tensor2im(self.fake_B.data)
+        real_A = util.tensor2im(self.real_A.detach())
+        fake_B = util.tensor2im(self.fake_B.detach())
         if self.isTrain:
             sel_B = self.real_B[:, self.min_idx[0], :, :]
         else:
-            sel_B = self.real_B[:, 0, :, :].unsqueeze(1)
-        real_B = util.tensor2im(sel_B.data)
+            sel_B = self.real_B[:, 0, :, :]
+        real_B = util.tensor2im(sel_B.unsqueeze(1).detach())
         return OrderedDict([('real_A', real_A), ('fake_B', fake_B), ('real_B', real_B)])
 
     def save(self, label):
-        self.save_network(self.netG, 'G', label, self.gpu_ids)
-        self.save_network(self.netD, 'D', label, self.gpu_ids)
+        self.save_network(self.netG, 'G', label)
+        self.save_network(self.netD, 'D', label)
 
     def write_image(self, out_dir):
-        image_numpy = self.fake_B.data[0][0].cpu().float().numpy()
+        image_numpy = self.fake_B.detach()[0][0].cpu().float().numpy()
         image_numpy = (image_numpy + 1) / 2.0 * 255.0
         image_pil = Image.fromarray(image_numpy.astype(np.uint8))
         image_pil = image_pil.resize((self.input_w[0], self.input_h[0]), Image.BICUBIC)

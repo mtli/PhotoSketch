@@ -60,17 +60,9 @@ class Paired1ToNDataset(BaseDataset):
             exponential_mask = (img > 0.04045).float()
             img = (img / 12.92 * linear_mask) + (((img + 0.055) / 1.055) ** 2.4) * exponential_mask
 
-            #imgVis = transforms.ToPILImage()(img)
-            #imgVis.save('%08d.png' % index)
-
-            #import sys
-            #sys.exit()
-
-        #Avis = img.clone()
         A = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(img)
 
         B = N*[None]
-        #Bvis = N*[None]
         for i in range(N):
             pathB = os.path.join(self.skt_dir, '%s_%02d.png' % (filename, i+1))
             img = Image.open(pathB)
@@ -91,17 +83,10 @@ class Paired1ToNDataset(BaseDataset):
             else:
                 img = img.resize((fine_size, fine_size), Image.BICUBIC)
                 img = transforms.ToTensor()(img)
-    
-            #Bvis[i] = torch.cat([img, img, img], 0)
 
             B[i] = transforms.Normalize((0.5,), (0.5,))(img)
 
         B = torch.cat(B, 0)
-
-        #Bvis.insert(0, Avis)
-        #vis = torch.cat(Bvis, 2)
-        #vis = transforms.ToPILImage()(vis)
-        #vis.save('%08d.png' % index)
 
         return {'A': A, 'B': B,
                 'A_paths': pathA, 'B_paths': pathB}

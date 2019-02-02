@@ -1,6 +1,6 @@
 dataDir=
 
-python test_only.py \
+python test_pretrained.py \
     --name pretrained \
     --dataset_mode test_dir \
     --dataroot examples/ \

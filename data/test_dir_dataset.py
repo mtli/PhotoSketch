@@ -3,13 +3,9 @@ from glob import glob
 import torchvision.transforms as transforms
 import torch
 from data.base_dataset import BaseDataset
-from data.image_folder import make_dataset
+from data.image_folder import make_dataset, IMG_EXTENSIONS
 from PIL import Image
 
-IMG_EXTENSIONS = [
-    '.jpg', '.JPG', '.jpeg', '.JPEG',
-    '.png', '.PNG', '.ppm', '.PPM', '.bmp', '.BMP',
-]
 
 class TestDirDataset(BaseDataset):
     def initialize(self, opt):

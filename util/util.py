@@ -18,19 +18,19 @@ def tensor2im(image_tensor, imtype=np.uint8):
     return image_numpy.astype(imtype)
 
 def tensor2im2(image_tensor, imtype=np.uint8):
-    image_numpy = image_tensor.data.cpu().float().numpy()
+    image_numpy = image_tensor.detach().cpu().float().numpy()
     image_numpy = (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 255.0
     return image_numpy.astype(imtype)
 
 def tensor2im3(image_tensor, imtype=np.uint8):
-    image_numpy = 1.0 - image_tensor.data.cpu().float().numpy()
+    image_numpy = 1.0 - image_tensor.detach().cpu().float().numpy()
     if image_numpy.shape[0] == 1:
         image_numpy = np.tile(image_numpy, (3, 1, 1))
     image_numpy = 255.0 * np.transpose(image_numpy, (1, 2, 0))
     return image_numpy.astype(imtype)
 
 def tensor2im4(image_tensor, img_mean, img_std, imtype=np.uint8):
-    image_numpy = image_tensor.data.cpu().float().numpy()
+    image_numpy = image_tensor.detach().cpu().float().numpy()
     n_channel = len(img_mean)
     for c in range(n_channel):
         image_numpy[c, :, :] = image_numpy[c, :, :]*img_std[c] + img_mean[c]
@@ -44,7 +44,7 @@ def diagnose_network(net, name='network'):
     count = 0
     for param in net.parameters():
         if param.grad is not None:
-            mean += torch.mean(torch.abs(param.grad.data))
+            mean += torch.mean(torch.abs(param.grad.detach()))
             count += 1
     if count > 0:
         mean = mean / count
