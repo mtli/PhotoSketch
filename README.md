@@ -8,7 +8,7 @@ For technical details and the dataset, please refer to the [**[paper]**](https:/
 
 # Setting up
 
-The code is now updated to use PyTorch 0.4 and runs on Windows, Mac and Linux. For the obsolete version with PyTorch 0.3 (Linux only), please check out the branch [pytorch-0.3-obsolete](tree/pytorch-0.3-obsolete).
+The code is now updated to use PyTorch 0.4 and runs on Windows, Mac and Linux. For the obsolete version with PyTorch 0.3 (Linux only), please check out the branch [pytorch-0.3-obsolete](../../tree/pytorch-0.3-obsolete).
 
 Windows users should find the corresponding `.cmd` files instead of `.sh` files mentioned below.
 
