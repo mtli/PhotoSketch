@@ -775,4 +775,6 @@ test_pretrained.py
 /Checkpoints/
 Checkpoints/
 .Checkpoints/
+/Checkpoints
+/scripts
 
