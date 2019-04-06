@@ -1,0 +1,56 @@
+------------ Options -------------
+aspect_ratio: 1.0
+aug_folder: width-5
+batchSize: 1
+checkpoints_dir: /Users/mingxu/Desktop/2560/PhotoSketch/Checkpoints/
+color_jitter: False
+crop: False
+dataroot: examples/
+dataset_mode: test_dir
+display_id: 1
+display_port: 8097
+display_server: http://localhost
+display_winsize: 256
+file_name: 
+fineSize: 256
+how_many: 50
+img_mean: None
+img_std: None
+init_type: normal
+input_nc: 3
+inverse_gamma: False
+isTrain: False
+jitter_amount: 0.02
+loadSize: 286
+lst_file: None
+max_dataset_size: inf
+model: pix2pix
+nGT: 5
+nThreads: 6
+n_layers_D: 3
+name: pretrained
+ndf: 64
+ngf: 64
+no_cuda: False
+no_dropout: True
+no_flip: False
+norm: batch
+ntest: inf
+output_nc: 1
+phase: test
+pretrain_path: 
+render_dir: sketch-rendered
+resize_or_crop: resize_and_crop
+results_dir: /Users/mingxu/Desktop/2560/PhotoSketch/Results/
+rot_int_max: 3
+rotate: False
+serial_batches: False
+stroke_dir: 
+stroke_no_couple: False
+suffix: 
+use_cuda: False
+which_direction: AtoB
+which_epoch: latest
+which_model_netD: basic
+which_model_netG: resnet_9blocks
+-------------- End ----------------
