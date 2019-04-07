@@ -13,6 +13,8 @@ import os.path
 
 import platform
 
+
+#get the valid extenstion name
 if platform.system() == 'Windows':
     IMG_EXTENSIONS = [
         '.jpg', '.jpeg', '.png', '.ppm', '.bmp',

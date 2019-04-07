@@ -74,17 +74,25 @@ class BaseOptions():
         self.parser.add_argument('--render_dir', type=str, default='sketch-rendered')
         self.parser.add_argument('--aug_folder', type=str, default='width-5')
         self.parser.add_argument('--stroke_dir', type=str, default='')
+
+        # set whether to crop the input image
         self.parser.add_argument('--crop', action='store_true')
+        # set whether to rotate the input image
         self.parser.add_argument('--rotate', action='store_true')
+        # set whether to color jitter the input image
         self.parser.add_argument('--color_jitter', action='store_true')
         self.parser.add_argument('--stroke_no_couple', action='store_true', help='')
         self.parser.add_argument('--pretrain_path', type=str, default='')
+
+        # set the number of sketches corresonding to an image
         self.parser.add_argument('--nGT', type=int, default=5)
         self.parser.add_argument('--rot_int_max', type=int, default=3)
+        # set the color jitter amount if needed
         self.parser.add_argument('--jitter_amount', type=float, default=0.02)
         self.parser.add_argument('--inverse_gamma', action='store_true')
         self.parser.add_argument('--img_mean', type=float, nargs='+')
         self.parser.add_argument('--img_std', type=float, nargs='+')
+        # set the path of the list_file
         self.parser.add_argument('--lst_file', type=str)
         self.initialized = True
 
