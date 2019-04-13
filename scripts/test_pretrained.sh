@@ -1,4 +1,4 @@
-dataDir=/Users/mingxu/Desktop/2560/PhotoSketch
+dataDir=~/scratch/PhotoSketch
 
 python test_pretrained.py \
     --name pretrained \
