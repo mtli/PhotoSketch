@@ -2,7 +2,7 @@
 aspect_ratio: 1.0
 aug_folder: width-5
 batchSize: 1
-checkpoints_dir: /Users/mingxu/Desktop/2560/PhotoSketch/Checkpoints/
+checkpoints_dir: /users/guest292/scratch/PhotoSketch/Checkpoints/
 color_jitter: False
 crop: False
 dataroot: examples/
@@ -41,7 +41,7 @@ phase: test
 pretrain_path: 
 render_dir: sketch-rendered
 resize_or_crop: resize_and_crop
-results_dir: /Users/mingxu/Desktop/2560/PhotoSketch/Results/
+results_dir: /users/guest292/scratch/PhotoSketch/Results/
 rot_int_max: 3
 rotate: False
 serial_batches: False
