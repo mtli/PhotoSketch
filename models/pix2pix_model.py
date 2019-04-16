@@ -9,19 +9,34 @@ from .base_model import BaseModel
 from . import networks
 from PIL import Image
 
-
+'''
+* @name: Pix2PixModel
+* @description: the model of pix2pix, which is derived from the BaseModel class
+* @param index: the index of data
+'''  
 class Pix2PixModel(BaseModel):
+    '''
+    * @name: name
+    * @description: return the name of this model
+    * @return: the name of this model
+    '''       
     def name(self):
         return 'Pix2PixModel'
-
+    '''
+    * @name: initialize
+    * @description: initialize the pix2pix model with the parameter set
+    * @param opt: the configured parameter set
+    '''   
     def initialize(self, opt):
+        #initialize the base class with given parameter set opt
         BaseModel.initialize(self, opt)
+        #get the type of the program(train or test)
         self.isTrain = opt.isTrain
 
-        # load/define networks
+        # load/define Generative Neural Network
         self.netG = networks.define_G(opt.input_nc, opt.output_nc, opt.ngf,
                                       opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type)
-
+        
         if self.isTrain:
             use_sigmoid = opt.no_lsgan
             self.netD = networks.define_D(opt.input_nc + opt.output_nc, opt.ndf,
