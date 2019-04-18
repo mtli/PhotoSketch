@@ -33,10 +33,10 @@ class Pix2PixModel(BaseModel):
         #get the type of the program(train or test)
         self.isTrain = opt.isTrain
 
-        # load/define Generative Neural Network
+        # load/define Generator
         self.netG = networks.define_G(opt.input_nc, opt.output_nc, opt.ngf,
                                       opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type)
-        
+        #define the Discriminator
         if self.isTrain:
             use_sigmoid = opt.no_lsgan
             self.netD = networks.define_D(opt.input_nc + opt.output_nc, opt.ndf,
@@ -47,27 +47,38 @@ class Pix2PixModel(BaseModel):
             self.load_network(self.netG, 'G', opt.which_epoch)
             if self.isTrain:
                 self.load_network(self.netD, 'D', opt.which_epoch)
-
+        #deploy generator to device
         self.netG = self.netG.to(self.device)
+
+        #deploy discriminator to device
         if self.isTrain:
             self.netD = self.netD.to(self.device)
 
+        #if the program is for training
         if self.isTrain:
+            #set the size of image buffer that stores previously generated images
             self.fake_AB_pool = ImagePool(opt.pool_size)
+
+            #set initial learning rate for adam
             self.old_lr = opt.lr
             # define loss functions
             self.criterionGAN = networks.GANLoss(use_lsgan=not opt.no_lsgan, device=self.device)
+
             self.criterionL1 = torch.nn.L1Loss().to(self.device)
 
             # initialize optimizers
             self.schedulers = []
             self.optimizers = []
+            #define the optimizer for generator
             self.optimizer_G = torch.optim.Adam(self.netG.parameters(),
                                                 lr=opt.lr, betas=(opt.beta1, 0.999))
+            #define the optimizer for discriminator
             self.optimizer_D = torch.optim.Adam(self.netD.parameters(),
                                                 lr=opt.lr, betas=(opt.beta1, 0.999))
+            #save the optimizers
             self.optimizers.append(self.optimizer_G)
             self.optimizers.append(self.optimizer_D)
+            #save schedulers
             for optimizer in self.optimizers:
                 self.schedulers.append(networks.get_scheduler(optimizer, opt))
 
@@ -77,6 +88,7 @@ class Pix2PixModel(BaseModel):
             networks.print_network(self.netD)
         print('-----------------------------------------------')
 
+    #get the input data set
     def set_input(self, input):
         AtoB = self.opt.which_direction == 'AtoB'
         self.input_A = input['A' if AtoB else 'B'].to(self.device)
@@ -86,10 +98,13 @@ class Pix2PixModel(BaseModel):
             self.input_w = input['w']
         if 'h' in input:
             self.input_h = input['h']
-
+    #the forward function
     def forward(self):
+        #get the input image
         self.real_A = self.input_A
+        #generate the fake image by generator
         self.fake_B = self.netG(self.real_A)
+        #get the groudtruth image
         self.real_B = self.input_B
 
     # no backprop gradients
@@ -101,6 +116,7 @@ class Pix2PixModel(BaseModel):
     def get_image_paths(self):
         return self.image_paths
 
+    #backpropagate function for discriminator
     def backward_D(self):
         # Fake
         # stop backprop to the generator by detaching fake_B
@@ -116,13 +132,15 @@ class Pix2PixModel(BaseModel):
             real_AB = torch.cat((self.real_A, sel_B), 1)
             pred_real = self.netD(real_AB)
             loss_D_real_set[i] = self.criterionGAN(pred_real, True)
+
+        #get the average all input groundtruth    
         self.loss_D_real = torch.mean(loss_D_real_set)
 
         # Combined loss
         self.loss_D = (self.loss_D_fake + self.loss_D_real) * 0.5 * self.opt.lambda_G
 
         self.loss_D.backward()
-
+    #backpropagate function for generator
     def backward_G(self):
         # First, G(A) should fake the discriminator
         fake_AB = torch.cat((self.real_A, self.fake_B), 1)
@@ -146,10 +164,11 @@ class Pix2PixModel(BaseModel):
     def optimize_parameters(self):
         self.forward()
 
+        #train discriminator
         self.optimizer_D.zero_grad()
         self.backward_D()
         self.optimizer_D.step()
-
+        #train the generator
         self.optimizer_G.zero_grad()
         self.backward_G()
         self.optimizer_G.step()
