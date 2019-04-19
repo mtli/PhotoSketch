@@ -20,4 +20,5 @@ python train.py \
     --crop --rotate --color_jitter \
     --niter 400 \
     --niter_decay 400 \
-    --no_html True \
+    --display_id 0 \
+    --continue_train \
