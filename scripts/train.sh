@@ -1,9 +1,9 @@
-dataDir=
+dataDir=~/scratch/PhotoSketch
 
 python train.py \
     --name default \
     --dataroot ${dataDir}/ContourDrawing/ \
-    --checkpoints_dir ${dataDir}/Exp/PhotoSketch/Checkpoints/ \
+    --checkpoints_dir ${dataDir}/Checkpoints/ \
     --model pix2pix \
     --which_direction AtoB \
     --dataset_mode 1_to_n \
@@ -20,3 +20,4 @@ python train.py \
     --crop --rotate --color_jitter \
     --niter 400 \
     --niter_decay 400 \
+    --no_html True \

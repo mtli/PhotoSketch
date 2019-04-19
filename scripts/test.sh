@@ -1,12 +1,12 @@
-dataDir=
+dataDir=~/scratch/PhotoSketch
 
 python test.py \
     --name default \
     --dataroot ${dataDir}/ContourDrawing/ \
     --phase val \
     --how_many 100 \
-    --checkpoints_dir ${dataDir}/Exp/PhotoSketch/Checkpoints/ \
-    --results_dir ${dataDir}/Exp/PhotoSketch/Results/ \
+    --checkpoints_dir ${dataDir}/Checkpoints/ \
+    --results_dir ${dataDir}/Results/ \
     --model pix2pix \
     --which_direction AtoB \
     --dataset_mode 1_to_n \
