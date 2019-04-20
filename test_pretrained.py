@@ -10,9 +10,10 @@ def main():
     opt.serial_batches = True  # no shuffle
     opt.no_flip = True  # no flip
 
+    #set the output directory for results
     if not os.path.isdir(opt.results_dir):
         os.makedirs(opt.results_dir)
-
+    
     data_loader = CreateDataLoader(opt)
     dataset = data_loader.load_data()
     model = create_model(opt)

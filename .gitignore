@@ -766,3 +766,15 @@ TSWLatexianTemp*
 
 
 ## This repository
+
+.scripts/
+scripts/
+Results/
+test_pretrained.py
+/scripts/
+/Checkpoints/
+Checkpoints/
+.Checkpoints/
+/Checkpoints
+/scripts
+

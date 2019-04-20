@@ -1,11 +1,11 @@
-dataDir=
+dataDir=~/scratch/PhotoSketch
 
 python test_pretrained.py \
     --name pretrained \
     --dataset_mode test_dir \
     --dataroot examples/ \
-    --results_dir ${dataDir}/Exp/PhotoSketch/Results/ \
-    --checkpoints_dir ${dataDir}/Exp/PhotoSketch/Checkpoints/ \
+    --results_dir ${dataDir}/Results/ \
+    --checkpoints_dir ${dataDir}/Checkpoints/ \
     --model pix2pix \
     --which_direction AtoB \
     --norm batch \
