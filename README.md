@@ -6,11 +6,6 @@ This repo contains the training & testing code for our sketch generator. We also
 
 For technical details and the dataset, please refer to the [**[paper]**](https://arxiv.org/abs/1901.00542) and the [**[project page]**](http://www.cs.cmu.edu/~mengtial/proj/sketch/).
 
-# Setting up
-
-The code is now updated to use PyTorch 0.4 and runs on Windows, Mac and Linux. For the obsolete version with PyTorch 0.3 (Linux only), please check out the branch [pytorch-0.3-obsolete](../../tree/pytorch-0.3-obsolete).
-
-Windows users should find the corresponding `.cmd` files instead of `.sh` files mentioned below.
 
 ## One-line installation (with Conda environments)
 `conda env create -f environment.yml`
