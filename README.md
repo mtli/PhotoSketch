@@ -1,44 +1,55 @@
-# Photo-Sketching: Inferring Contour Drawings from Images
+# Inferring Contour Sketches from Images
+## ENGN2560 - Computer Vision
+### Final Project (*May, 2019*)
+
+
+#### Xingchen Ming xingchen_ming@brown.edu 
+#### Ming Xu ming_xu1@brown.edu 
+#### Geng Yang   geng_yang@brown.edu
 
 <p align="center"><img alt="Teaser" src="doc/teaser.jpg"></p>
 
-This repo contains the training & testing code for our sketch generator. We also provide a [[pre-trained model]](https://drive.google.com/file/d/1TQf-LyS8rRDDapdcTnEgWzYJllPgiXdj/view).
+# Dataset
+## NOTE: Please download and extract the dataset under directory `PhotoSketch/`
 
-For technical details and the dataset, please refer to the [**[paper]**](https://arxiv.org/abs/1901.00542) and the [**[project page]**](http://www.cs.cmu.edu/~mengtial/proj/sketch/).
+### https://drive.google.com/open?id=1ajNGbYSSxWZyCT3X4qlga7maUz6UZ3nD
 
-# Setting up
+# Setting up on Brown CCV
 
-The code is now updated to use PyTorch 0.4 and runs on Windows, Mac and Linux. For the obsolete version with PyTorch 0.3 (Linux only), please check out the branch [pytorch-0.3-obsolete](../../tree/pytorch-0.3-obsolete).
+1. Load Anaconda3-5.2.0
 
-Windows users should find the corresponding `.cmd` files instead of `.sh` files mentioned below.
+``` 
+module load anaconda/3-5.2.0
+```
 
-## One-line installation (with Conda environments)
-`conda env create -f environment.yml`
 
-Then activate the environment (sketch) and you are ready to go!
+2. One-line installation (with Conda environments)
+```
+conda env create -f environment.yml
+```
 
-See [here](https://conda.io/docs/user-guide/tasks/manage-environments.html) for more information about conda environments.
+3. Activate the environment
+```
+source activate sketch
+```
 
-## Manual installation
-See `environment.yml` for a list of dependencies.
+# Running Instructions
+## NOTE: All srcipts should be executed under directory `PhotoSketch/`
+## Train model
+```
+sbatch cuda.sh
+```
+## Test model
+1. Request a GPU node
+```
+interact -n 16 -m 16g -q gpu -g 1
+```
+2. Run the test script
+```
+sh scripts/test_pretrained.sh
+```
 
-# Using the pre-trained model
 
-- Download the [pre-trained model](https://drive.google.com/file/d/1TQf-LyS8rRDDapdcTnEgWzYJllPgiXdj/view)
-- Modify the path in `scripts/test_pretrained.sh`
-- From the repo's **root directory**, run `scripts/test_pretrained.sh`
-
-It supports a folder of images as input.
-
-# Train & test on our contour drawing dataset
-
-- Download the images and the rendered sketch from the [project page](http://www.cs.cmu.edu/~mengtial/proj/sketch/)
-- Unzip and organize them into the following structure:
-<p align="center"><img alt="File structure" src="doc/file_structure.png"></p>
-
-- Modify the path in `scripts/train.sh` and `scripts/test.sh`
-- From the repo's **root directory**, run `scripts/train.sh` to train the model
-- From the repo's **root directory**, run `scripts/test.sh` to test on the val set or the test set (specified by the phase flag)
 
 ## Citation
 If you use the code or the data for your research, please cite the paper:
