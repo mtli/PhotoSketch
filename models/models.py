@@ -1,4 +1,5 @@
 
+#create a pix2pix model
 def create_model(opt):
     model = None
     print(opt.model)
@@ -7,6 +8,7 @@ def create_model(opt):
         model = Pix2PixModel()
     else:
         raise ValueError("Model [%s] not recognized." % opt.model)
+    #initialize the model
     model.initialize(opt)
     print("model [%s] was created" % (model.name()))
     return model
